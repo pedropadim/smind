@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saúde na Tela - Conectando Vidas</title>
+    <!-- Ícones FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            /* Mantendo a paleta azul/teal que transmite confiança médica */
+            --primary: #0056b3;    /* Azul Principal */
+            --secondary: #004494;  /* Azul Escuro */
+            --teal: #20c997;       /* Verde/Teal - Saúde */
+            --teal-dark: #1aa179;
+            --accent: #e7f1ff;
+            --text: #333;
+            --text-light: #666;
+            --light-gray: #f8f9fa;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- MENU SUPERIOR --- */
+        .app-header {
+            background-color: #ffffff;
+            padding: 10px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        /* Ícone de monitor/saúde para o logo */
+        .logo-icon { font-size: 1.8rem; color: var(--teal); }
+        .app-name { font-size: 1.3rem; font-weight: 700; color: #0056b3; margin: 0; }
+
+        .nav-menu { list-style: none; display: flex; gap: 30px; margin: 0; padding: 0; }
+        .nav-menu a { text-decoration: none; color: #666; font-weight: 600; font-size: 0.95rem; transition: 0.3s; position: relative; }
+        .nav-menu a:hover, .nav-menu a.active { color: #0056b3; }
+        .nav-menu a::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0;
+            background-color: #0056b3; transition: width 0.3s;
+        }
+        .nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
+
+        /* --- HERO SECTION --- */
+        .project-hero {
+            background: #fff;
+            padding: 60px 20px 40px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .project-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .project-subtitle {
+            font-size: 1.2rem;
+            color: var(--teal-dark);
+            font-weight: 600;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- DIAGRAMA CONCEITUAL (3 PILARES) --- */
+        .diagram-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            position: relative;
+            padding: 20px 0 60px;
+        }
+
+        /* Linha conectora */
+        .diagram-container::before {
+            content: '';
+            position: absolute;
+            top: 55px;
+            left: 15%;
+            right: 15%;
+            height: 2px;
+            background: repeating-linear-gradient(to right, var(--teal) 0, var(--teal) 10px, transparent 10px, transparent 20px);
+            z-index: 0;
+        }
+
+        .concept-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+            border-top: 4px solid transparent;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-10px);
+            border-top-color: var(--primary);
+        }
+
+        .concept-icon-box {
+            width: 70px;
+            height: 70px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 20px;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Cores alternadas para os ícones */
+        .concept-card:nth-child(2) .concept-icon-box { background: var(--teal); }
+        .concept-card:nth-child(3) .concept-icon-box { background: var(--secondary); }
+
+        .concept-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .concept-tag {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .concept-text {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        /* --- SEÇÃO QUEM SOMOS / AUTOR --- */
+        .author-section {
+            background-color: #f4f7f6;
+            padding: 60px 20px;
+        }
+
+        .author-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .author-compact {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+            border-left: 5px solid var(--secondary);
+            margin-bottom: 40px;
+            gap: 30px;
+        }
+
+        .author-photo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+            flex-shrink: 0;
+            background-color: #eee; /* Fallback se imagem não carregar */
+        }
+
+        .author-info h3 {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .quote-box {
+            position: relative;
+            padding: 20px 40px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .quote-box i { color: var(--teal); font-size: 1.5rem; margin-bottom: 10px; display: block; }
+        .quote-box p { font-style: italic; color: #555; font-size: 1.1rem; }
+
+        .trajectory-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .trajectory-item {
+            background: transparent;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            transition: 0.2s;
+        }
+
+        .trajectory-item:hover {
+            background: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .traj-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .traj-list { list-style: none; font-size: 0.9rem; color: #666; }
+        .traj-list li { margin-bottom: 8px; padding-left: 15px; position: relative; }
+        .traj-list li::before {
+            content: '•'; color: var(--teal); position: absolute; left: 0; font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 0.85rem;
+            background: #fff;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+        }
+
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .diagram-container { grid-template-columns: 1fr; gap: 40px; }
+            .diagram-container::before { display: none; }
+            
+            .author-compact { flex-direction: column; text-align: center; }
+            .trajectory-grid { grid-template-columns: 1fr; }
+            
+            .app-header { flex-direction: column; gap: 15px; padding: 15px; }
+            .nav-menu { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/kinetic.css"></head>
+<body>
+
+<!-- MENU SUPERIOR -->
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a><div class="reading-line" aria-hidden="true"></div><nav class="sm-nav" aria-label="Navegação principal"><a class="sm-brand" href="index.html" aria-label="SyntropicMind, início"><img src="assets/logo.png" width="180" height="60" alt="SyntropicMind"></a><button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="sm-links"><span></span><span></span></button><div class="sm-links" id="sm-links"><a style="--i:0" href="index.html">Visão geral</a><a style="--i:1" href="sf36.html">SF-36</a><a style="--i:2" href="msq_consentimento.html">Sono</a><a style="--i:3" href="dashboard.html">Relatório SF-36</a><a style="--i:4" href="resultado.html">Relatório do sono</a></div></nav><main id="conteudo" class="auxiliary"><section class="sm-hero shell"><div class="hero-copy"><div class="eyebrow">SyntropicMind / Explorar</div><h1>Tecnologia a serviço<br>do cuidado.</h1><p>Conheça a proposta que conecta saúde e experiência digital.</p><div class="hero-tags"></div></div><div class="kinetic-art" aria-hidden="true"><svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width=".8"><g opacity=".48" class="orbit-a"><ellipse cx="200" cy="200" rx="140" ry="42" transform="rotate(0 200 200)"/><ellipse cx="200" cy="200" rx="134" ry="47" transform="rotate(8 200 200)"/><ellipse cx="200" cy="200" rx="128" ry="52" transform="rotate(16 200 200)"/><ellipse cx="200" cy="200" rx="122" ry="57" transform="rotate(24 200 200)"/><ellipse cx="200" cy="200" rx="116" ry="62" transform="rotate(32 200 200)"/><ellipse cx="200" cy="200" rx="110" ry="67" transform="rotate(40 200 200)"/><ellipse cx="200" cy="200" rx="104" ry="72" transform="rotate(48 200 200)"/><ellipse cx="200" cy="200" rx="98" ry="77" transform="rotate(56 200 200)"/><ellipse cx="200" cy="200" rx="92" ry="82" transform="rotate(64 200 200)"/><ellipse cx="200" cy="200" rx="86" ry="87" transform="rotate(72 200 200)"/><ellipse cx="200" cy="200" rx="80" ry="92" transform="rotate(80 200 200)"/></g><g class="orbit-b" opacity=".32" transform="rotate(60 200 200)"><ellipse cx="200" cy="200" rx="140" ry="42" transform="rotate(0 200 200)"/><ellipse cx="200" cy="200" rx="134" ry="47" transform="rotate(8 200 200)"/><ellipse cx="200" cy="200" rx="128" ry="52" transform="rotate(16 200 200)"/><ellipse cx="200" cy="200" rx="122" ry="57" transform="rotate(24 200 200)"/><ellipse cx="200" cy="200" rx="116" ry="62" transform="rotate(32 200 200)"/><ellipse cx="200" cy="200" rx="110" ry="67" transform="rotate(40 200 200)"/><ellipse cx="200" cy="200" rx="104" ry="72" transform="rotate(48 200 200)"/><ellipse cx="200" cy="200" rx="98" ry="77" transform="rotate(56 200 200)"/><ellipse cx="200" cy="200" rx="92" ry="82" transform="rotate(64 200 200)"/><ellipse cx="200" cy="200" rx="86" ry="87" transform="rotate(72 200 200)"/><ellipse cx="200" cy="200" rx="80" ry="92" transform="rotate(80 200 200)"/></g><g class="orbit-c" opacity=".25"><circle cx="200" cy="200" r="134"/><ellipse cx="200" cy="200" rx="68" ry="160"/><ellipse cx="200" cy="200" rx="155" ry="74"/></g><circle class="orbit-core" cx="200" cy="200" r="16" fill="currentColor" stroke="none"/><circle cx="200" cy="200" r="4" fill="currentColor" stroke="none"/></svg><span class="art-caption">FORMAS EM EQUILÍBRIO</span></div></section><div class="auxiliary-body">
+
+<!-- SEÇÃO PRINCIPAL: PROPÓSITO DO PROJETO -->
+<section class="project-hero">
+    <h1 class="project-title">Saúde na Tela</h1>
+    <p class="project-subtitle">Tecnologia, Acessibilidade & Cuidado Humano</p>
+
+    <!-- DIAGRAMA VISUAL (3 PILARES ADAPTADOS) -->
+    <div class="diagram-container">
+        
+        <!-- Pilar 1: Conectividade -->
+        <div class="concept-card">
+            <div class="concept-icon-box">
+                <i class="fas fa-wifi"></i>
+            </div>
+            <h3 class="concept-title">Conectividade</h3>
+            <span class="concept-tag">Sem Fronteiras</span>
+            <p class="concept-text">
+                A barreira geográfica não pode mais ser um impedimento para o acesso à saúde especializada.
+            </p>
+        </div>
+
+        <!-- Pilar 2: O Paciente -->
+        <div class="concept-card">
+            <div class="concept-icon-box">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <h3 class="concept-title">Cuidado Integral</h3>
+            <span class="concept-tag">Foco no Paciente</span>
+            <p class="concept-text">
+                Nosso foco é a experiência do paciente. Oferecer cuidado não é só sobre resultados, mas sim sobre a percepção individual de sentir-se melhor.
+            </p>
+        </div>
+
+        <!-- Pilar 3: Inovação -->
+        <div class="concept-card">
+            <div class="concept-icon-box">
+                <i class="fas fa-tablet-alt"></i>
+            </div>
+            <h3 class="concept-title">Plataforma Digital</h3>
+            <span class="concept-tag">Simples & Segura</span>
+            <p class="concept-text">
+                Questionários de auto-avaliação para promoção de saúde, dentro de um sistema seguro e anonimizado.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- SEÇÃO DO AUTOR (SINGELA E ESTILIZADA) -->
+<section class="author-section">
+    <div class="author-container">
+        
+        <!-- Citação de Transição -->
+        <div class="quote-box">
+            <i class="fas fa-quote-left"></i>
+            <p>"A busca pelo entendimento do processo de saúde-doença deve transcender a elucidação de mecanismos fisiopatológicos para alcançar a natureza intrínseca do 'bem-estar'."</p>
+        </div>
+
+        <!-- Perfil Compacto -->
+        <div class="author-compact">
+            <img src="pedro-selfie.jpeg" alt="Dr. Pedro Antonio Padim" class="author-photo">
+            <div class="author-info">
+                <h3>Dr. Pedro Antonio Padim</h3>
+                <p>Médico | Residente em Neurocirurgia | CRM-SP 180.679</p>
+                <p style="font-size: 0.9rem; margin-top: 5px; color: #888;">Idealizador do SF-36 Analytics</p>
+            </div>
+        </div>
+
+        <!-- Trajetória (Grid Discreto) -->
+        <div class="trajectory-grid">
+            <div class="trajectory-item">
+                <div class="traj-header"><i class="fas fa-graduation-cap"></i> Formação</div>
+                <ul class="traj-list">
+                    <li>Residência Neurocirurgia (Santa Casa Ribeirão Preto)</li>
+                    <li>Medicina FMRP-USP</li>
+                    <li>Intercâmbio University of Toronto (Canadá)</li>
+                </ul>
+            </div>
+
+            <div class="trajectory-item">
+                <div class="traj-header"><i class="fas fa-globe-americas"></i> Internacional</div>
+                <ul class="traj-list">
+                    <li>Sick Kids’ Hospital (Toronto)</li>
+                    <li>St. Michael’s Hospital (Research Fellowship)</li>
+                    <li>Academic English & Arts (UofT)</li>
+                </ul>
+            </div>
+
+            <div class="trajectory-item">
+                <div class="traj-header"><i class="fas fa-briefcase-medical"></i> Clínica</div>
+                <ul class="traj-list">
+                    <li>Hospital Amaral Carvalho (Jaú)</li>
+                    <li>Hospital Santa Lydia (UTI)</li>
+                    <li>2º Tenente Médico FAB (AFA)</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+</div></main><footer class="sm-footer"><div class="shell footer-inner"><div><span class="footer-brand">SyntropicMind</span><p>Saúde, percepção e conhecimento.</p></div><button class="motion-toggle" type="button" aria-pressed="false">Pausar movimento</button><div class="footer-links"><a href="../index.html#projetos">Voltar ao SyntropicMind</a><a href="comparativo.html">Comparação</a><a href="index-sf36.html">Guia SF-36</a><a href="indexmsq.html">Guia MSQ</a><a href="sono.html">Sobre o sono</a><a href="referencias.html">Referências SF-36</a><a href="referencia-sono.html">Referências MSQ</a><a href="sobre.html">Sobre o projeto</a><a href="autor.html">Autor</a><a href="contato.html">Contato</a><a href="index.html">Questionários</a><a href="sf36.html">Consentimento SF-36</a><a href="msq_consentimento.html">Consentimento MSQ</a></div></div></footer><script src="assets/kinetic.js" defer></script></body>
+</html>

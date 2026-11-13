@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fisiologia do Sono | MSQ-BR</title>
+    <!-- Ícones Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0056b3;    /* Azul Principal */
+            --secondary: #004494;  /* Azul Escuro */
+            --teal: #20c997;       /* Verde para Resultados */
+            --teal-dark: #1aa179;
+            --purple: #6f42c1;     /* Roxo para Sono */
+            --purple-light: #e2d9f3;
+            --orange: #fd7e14;     /* Laranja para Referências */
+            --text: #333;
+            --text-light: #666;
+            --white: #ffffff;
+            --bg-light: #f9fbfd;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- MENU SUPERIOR (Mantido do Template) --- */
+        .app-header {
+            background-color: #ffffff;
+            padding: 10px 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { font-size: 1.8rem; color: var(--primary); }
+        .app-name { font-size: 1.4rem; font-weight: 700; color: #0056b3; margin: 0; }
+
+        .nav-menu { list-style: none; display: flex; gap: 30px; margin: 0; padding: 0; }
+        .nav-menu a { text-decoration: none; color: #666; font-weight: 600; transition: 0.3s; position: relative; font-size: 1rem; }
+        .nav-menu a:hover, .nav-menu a.active { color: #0056b3; }
+        
+        .nav-menu a::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0;
+            background-color: #0056b3; transition: width 0.3s;
+        }
+        .nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
+
+        /* Barra de Navegação Secundária */
+        .secondary-nav {
+            background: var(--white);
+            padding: 15px 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-secondary {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--purple); /* Alterado para Roxo (Tema Sono) */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- CONTEÚDO EDUCACIONAL --- */
+        .content-container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .page-title {
+            text-align: center;
+            color: var(--purple);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Sistema de Abas */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: #e9ecef;
+            color: #555;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover { background: #dee2e6; }
+        
+        .tab-btn.active {
+            background: var(--purple);
+            color: white;
+            box-shadow: 0 4px 10px rgba(111, 66, 193, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards de Conteúdo */
+        .info-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-left: 5px solid var(--purple);
+        }
+
+        .info-section h2 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .concept-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+        
+        .concept-card h3 { color: var(--purple); font-size: 1.1rem; margin-bottom: 10px; }
+        .concept-card p { font-size: 0.95rem; color: #555; }
+
+        /* Visualização das Forças do Sono */
+        .forces-visual {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: linear-gradient(to right, #f1f3f5, #e9ecef);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .force-item {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .force-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .force-chem { color: var(--orange); animation: pulse 3s infinite; }
+        .force-circ { color: var(--primary); }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        /* Ciclo do Sono Interativo */
+        .sleep-cycle-container {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .cycle-stages {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .cycle-stages::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #e9ecef;
+            z-index: 0;
+            transform: translateY(-50%);
+        }
+
+        .stage-node {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border: 3px solid var(--purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--purple);
+            z-index: 1;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .stage-node:hover, .stage-node.active-node {
+            background: var(--purple);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(111, 66, 193, 0.4);
+        }
+
+        .stage-details {
+            background: var(--purple-light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            color: var(--secondary);
+            display: none;
+        }
+        .stage-details.visible { display: block; }
+
+        /* Protocolos - Acordeão */
+        .protocol-group { margin-bottom: 15px; }
+        
+        .protocol-header {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--secondary);
+            transition: 0.2s;
+        }
+
+        .protocol-header:hover { background: #f1f3f5; }
+        .protocol-header i { color: var(--purple); }
+
+        .protocol-body {
+            background: white;
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .protocol-body.open { max-height: 500px; padding: 20px; }
+
+        .protocol-list { list-style: none; }
+        .protocol-list li { margin-bottom: 10px; padding-left: 20px; position: relative; }
+        .protocol-list li::before {
+            content: '•'; color: var(--teal); font-weight: bold; position: absolute; left: 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            border-left: 4px solid #ffc107;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 0.85rem;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+            background: white;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .app-header { flex-direction: column; padding: 15px; gap: 15px; }
+            .nav-menu { flex-wrap: wrap; justify-content: center; gap: 15px; }
+            .secondary-nav { display: none; }
+            .forces-visual { flex-direction: column; }
+            .cycle-stages { overflow-x: auto; padding-bottom: 10px; }
+            .stage-node { min-width: 60px; }
+        }
+    </style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/kinetic.css"></head>
+<body>
+
+<!-- MENU SUPERIOR -->
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a><div class="reading-line" aria-hidden="true"></div><nav class="sm-nav" aria-label="Navegação principal"><a class="sm-brand" href="index.html" aria-label="SyntropicMind, início"><img src="assets/logo.png" width="180" height="60" alt="SyntropicMind"></a><button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="sm-links"><span></span><span></span></button><div class="sm-links" id="sm-links"><a style="--i:0" href="index.html">Visão geral</a><a style="--i:1" href="sf36.html">SF-36</a><a style="--i:2" href="msq_consentimento.html">Sono</a><a style="--i:3" href="dashboard.html">Relatório SF-36</a><a style="--i:4" href="resultado.html">Relatório do sono</a></div></nav><main id="conteudo" class="auxiliary"><section class="sm-hero shell"><div class="hero-copy"><div class="eyebrow">SyntropicMind / Explorar</div><h1>O ritmo do descanso.</h1><p>Explore o conteúdo sobre fisiologia e hábitos de sono.</p><div class="hero-tags"></div></div><div class="kinetic-art" aria-hidden="true"><svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width=".8"><g opacity=".48" class="orbit-a"><ellipse cx="200" cy="200" rx="140" ry="42" transform="rotate(0 200 200)"/><ellipse cx="200" cy="200" rx="134" ry="47" transform="rotate(8 200 200)"/><ellipse cx="200" cy="200" rx="128" ry="52" transform="rotate(16 200 200)"/><ellipse cx="200" cy="200" rx="122" ry="57" transform="rotate(24 200 200)"/><ellipse cx="200" cy="200" rx="116" ry="62" transform="rotate(32 200 200)"/><ellipse cx="200" cy="200" rx="110" ry="67" transform="rotate(40 200 200)"/><ellipse cx="200" cy="200" rx="104" ry="72" transform="rotate(48 200 200)"/><ellipse cx="200" cy="200" rx="98" ry="77" transform="rotate(56 200 200)"/><ellipse cx="200" cy="200" rx="92" ry="82" transform="rotate(64 200 200)"/><ellipse cx="200" cy="200" rx="86" ry="87" transform="rotate(72 200 200)"/><ellipse cx="200" cy="200" rx="80" ry="92" transform="rotate(80 200 200)"/></g><g class="orbit-b" opacity=".32" transform="rotate(60 200 200)"><ellipse cx="200" cy="200" rx="140" ry="42" transform="rotate(0 200 200)"/><ellipse cx="200" cy="200" rx="134" ry="47" transform="rotate(8 200 200)"/><ellipse cx="200" cy="200" rx="128" ry="52" transform="rotate(16 200 200)"/><ellipse cx="200" cy="200" rx="122" ry="57" transform="rotate(24 200 200)"/><ellipse cx="200" cy="200" rx="116" ry="62" transform="rotate(32 200 200)"/><ellipse cx="200" cy="200" rx="110" ry="67" transform="rotate(40 200 200)"/><ellipse cx="200" cy="200" rx="104" ry="72" transform="rotate(48 200 200)"/><ellipse cx="200" cy="200" rx="98" ry="77" transform="rotate(56 200 200)"/><ellipse cx="200" cy="200" rx="92" ry="82" transform="rotate(64 200 200)"/><ellipse cx="200" cy="200" rx="86" ry="87" transform="rotate(72 200 200)"/><ellipse cx="200" cy="200" rx="80" ry="92" transform="rotate(80 200 200)"/></g><g class="orbit-c" opacity=".25"><circle cx="200" cy="200" r="134"/><ellipse cx="200" cy="200" rx="68" ry="160"/><ellipse cx="200" cy="200" rx="155" ry="74"/></g><circle class="orbit-core" cx="200" cy="200" r="16" fill="currentColor" stroke="none"/><circle cx="200" cy="200" r="4" fill="currentColor" stroke="none"/></svg><span class="art-caption">FORMAS EM EQUILÍBRIO</span></div></section><div class="auxiliary-body">
+    
+<!-- MENU SECUNDÁRIO -->
+
+
+<div class="content-container">
+    <h1 class="page-title">Fisiologia e Higiene do Sono</h1>
+    <p class="page-subtitle">Entenda como seu corpo regula o descanso e aprenda protocolos práticos para otimizar sua recuperação física e mental.</p>
+
+    <!-- NAVEGAÇÃO INTERNA (ABAS) -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('fisiologia')">
+            <i class="fas fa-brain"></i> Fisiologia
+        </button>
+        <button class="tab-btn" onclick="openTab('avaliacao')">
+            <i class="fas fa-search"></i> Avaliação
+        </button>
+        <button class="tab-btn" onclick="openTab('protocolos')">
+            <i class="fas fa-list-check"></i> Protocolos
+        </button>
+    </div>
+
+    <!-- CONTEÚDO 1: FISIOLOGIA -->
+    <div id="fisiologia" class="tab-content active">
+        
+        <div class="info-section">
+            <h2><i class="fas fa-balance-scale"></i> As Duas Forças do Sono</h2>
+            <p>O sono não é um estado passivo, mas sim regulado por duas forças biológicas principais que competem e colaboram:</p>
+            
+            <div class="forces-visual">
+                <div class="force-item">
+                    <i class="fas fa-flask force-icon force-chem"></i>
+                    <h3>Força Química</h3>
+                    <p style="font-size: 0.9rem; margin-top: 5px;"><strong>Adenosina</strong></p>
+                    <p style="font-size: 0.85rem; color: #666;">Acumula ao longo do dia gerando "pressão de sono". Quanto mais tempo acordado, maior a pressão.</p>
+                </div>
+                <div class="force-item">
+                    <i class="fas fa-sun force-icon force-circ"></i>
+                    <h3>Força Circadiana</h3>
+                    <p style="font-size: 0.9rem; margin-top: 5px;"><strong>Relógio Biológico</strong></p>
+                    <p style="font-size: 0.85rem; color: #666;">Ciclo de 24h regulado pela luz e escuridão. Controla o estado de alerta independente do cansaço.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2><i class="fas fa-wave-square"></i> Arquitetura e Ciclos</h2>
+            <p>O sono ocorre em ciclos de 90 a 110 minutos. Clique nos estágios abaixo para entender sua função:</p>
+            
+            <div class="sleep-cycle-container">
+                <div class="cycle-stages">
+                    <div class="stage-node active-node" onclick="showStage('nrem', this)">NREM</div>
+                    <div class="stage-node" onclick="showStage('sws', this)">SWS</div>
+                    <div class="stage-node" onclick="showStage('rem', this)">REM</div>
+                </div>
+
+                <div id="detail-nrem" class="stage-details visible">
+                    <h3>NREM (Non-Rapid Eye Movement)</h3>
+                    <p>Estágios iniciais do sono (N1 e N2). É a transição da vigília para o sono profundo. O corpo relaxa, a temperatura cai e as ondas cerebrais desaceleram.</p>
+                </div>
+
+                <div id="detail-sws" class="stage-details">
+                    <h3>SWS (Sono de Ondas Lentas / N3)</h3>
+                    <p><strong>Crucial para restauração física.</strong> É aqui que ocorre o aprendizado motor e a consolidação de memórias declarativas (fatos e detalhes). É o sono profundo.</p>
+                </div>
+
+                <div id="detail-rem" class="stage-details">
+                    <h3>REM (Rapid Eye Movement)</h3>
+                    <p><strong>Terapia Noturna.</strong> Fase dos sonhos intensos. Essencial para o processamento emocional, ajudando a desacoplar a emoção da memória traumática ou estressante.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2><i class="fas fa-dna"></i> Neurotransmissores Chave</h2>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h3>Cortisol & Epinefrina</h3>
+                    <p>Promovem o estado de alerta e energia. Devem estar altos pela manhã.</p>
+                </div>
+                <div class="concept-card">
+                    <h3>Melatonina</h3>
+                    <p>Hormônio da escuridão. Sinaliza ao corpo que é hora de dormir. Inibida pela luz.</p>
+                </div>
+                <div class="concept-card">
+                    <h3>Adenosina</h3>
+                    <p>Subproduto do gasto de energia. Cria a vontade de dormir.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO 2: AVALIAÇÃO -->
+    <div id="avaliacao" class="tab-content">
+        <div class="info-section">
+            <h2><i class="fas fa-clipboard-check"></i> Autoavaliação</h2>
+            <p>Para identificar a qualidade do seu sono, observe a consistência (horários regulares) e os sinais de alerta abaixo.</p>
+            
+            <div class="concept-grid">
+                <div class="concept-card" style="border-top: 4px solid var(--orange);">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Sinais de Alerta</h3>
+                    <ul style="padding-left: 20px; font-size: 0.9rem; margin-top: 10px;">
+                        <li>Despertares noturnos frequentes.</li>
+                        <li>Inércia extrema ao acordar (dificuldade de sair da cama).</li>
+                        <li>Irritabilidade e mudanças de humor.</li>
+                        <li>Lapsos de memória durante o dia.</li>
+                    </ul>
+                </div>
+                <div class="concept-card" style="border-top: 4px solid var(--teal);">
+                    <h3><i class="fas fa-shield-alt"></i> Inimigos do Sono</h3>
+                    <ul style="padding-left: 20px; font-size: 0.9rem; margin-top: 10px;">
+                        <li><strong>Cafeína:</strong> Evitar 8-10h antes de dormir.</li>
+                        <li><strong>Álcool:</strong> Fragmenta o sono e bloqueia o REM.</li>
+                        <li><strong>Luz Artificial:</strong> Entre 23h e 4h suprime melatonina.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="msq_consentimento.html" class="tab-btn" style="background: var(--primary); color: white; display: inline-flex; width: auto;">
+                    <i class="fas fa-file-medical"></i> Fazer o Questionário MSQ Agora
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO 3: PROTOCOLOS -->
+    <div id="protocolos" class="tab-content">
+        <div class="info-section">
+            <h2><i class="fas fa-tasks"></i> Protocolos Comportamentais</h2>
+            <p>Otimize seu sono ajustando comportamentos ao longo do dia. Clique para expandir:</p>
+
+            <!-- Manhã -->
+            <div class="protocol-group">
+                <div class="protocol-header" onclick="toggleProtocol(this)">
+                    <span><i class="fas fa-sun"></i> Manhã (Ao Acordar)</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="protocol-body">
+                    <ul class="protocol-list">
+                        <li><strong>Luz Solar:</strong> Exposição direta (sem óculos escuros/vidro) por 10-30 min logo após acordar. Isso ancora o ritmo circadiano.</li>
+                        <li><strong>Banhos Frios:</strong> Ajudam a aumentar a temperatura central (por reação) e o estado de alerta.</li>
+                        <li><strong>Exercício:</strong> Ótimo momento para atividades físicas (30 min após acordar).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tarde -->
+            <div class="protocol-group">
+                <div class="protocol-header" onclick="toggleProtocol(this)">
+                    <span><i class="fas fa-cloud-sun"></i> Tarde & Pôr do Sol</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="protocol-body">
+                    <ul class="protocol-list">
+                        <li><strong>Visualizar o Pôr do Sol:</strong> Ajuda a proteger o cérebro contra os efeitos negativos da luz artificial mais tarde.</li>
+                        <li><strong>Cafeína:</strong> Suspender o consumo de café/estimulantes no início da tarde.</li>
+                        <li><strong>Sonecas:</strong> Máximo de 20-25 min, apenas se não tiver insônia noturna.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Noite -->
+            <div class="protocol-group">
+                <div class="protocol-header" onclick="toggleProtocol(this)">
+                    <span><i class="fas fa-moon"></i> Noite (Pré-Sono)</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="protocol-body">
+                    <ul class="protocol-list">
+                        <li><strong>Ambiente Escuro:</strong> Use luzes baixas, avermelhadas ou abajures. Evite luz de teto forte.</li>
+                        <li><strong>Temperatura:</strong> Banhos quentes ou sauna ajudam o corpo a resfriar depois, induzindo o sono.</li>
+                        <li><strong>Desaceleração:</strong> Evite telas 1-2h antes de dormir. Use um "Worry Journal" para escrever preocupações e limpar a mente.</li>
+                        <li><strong>NSDR:</strong> Pratique Yoga Nidra ou relaxamento guiado para ativar o sistema parassimpático.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong><i class="fas fa-pills"></i> Sobre Suplementos:</strong> 
+                O guia recomenda focar primeiro nos comportamentos (90% do resultado). Suplementos como Magnésio Treonato, L-Teanina ou Apigenina devem ser considerados apenas como último recurso e sempre com orientação médica.
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+</div></main><footer class="sm-footer"><div class="shell footer-inner"><div><span class="footer-brand">SyntropicMind</span><p>Saúde, percepção e conhecimento.</p></div><button class="motion-toggle" type="button" aria-pressed="false">Pausar movimento</button><div class="footer-links"><a href="../index.html#projetos">Voltar ao SyntropicMind</a><a href="comparativo.html">Comparação</a><a href="index-sf36.html">Guia SF-36</a><a href="indexmsq.html">Guia MSQ</a><a href="sono.html">Sobre o sono</a><a href="referencias.html">Referências SF-36</a><a href="referencia-sono.html">Referências MSQ</a><a href="sobre.html">Sobre o projeto</a><a href="autor.html">Autor</a><a href="contato.html">Contato</a><a href="index.html">Questionários</a><a href="sf36.html">Consentimento SF-36</a><a href="msq_consentimento.html">Consentimento MSQ</a></div></div></footer><script>
+    // Função para trocar abas
+    function openTab(tabId) {
+        // Esconde todos os conteúdos
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+
+        // Remove classe active dos botões
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+
+        // Ativa o selecionado
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // Função para o Ciclo do Sono
+    function showStage(stageId, element) {
+        // Esconde detalhes
+        const details = document.querySelectorAll('.stage-details');
+        details.forEach(d => d.classList.remove('visible'));
+
+        // Remove destaque dos nós
+        const nodes = document.querySelectorAll('.stage-node');
+        nodes.forEach(n => n.classList.remove('active-node'));
+
+        // Mostra o selecionado
+        document.getElementById('detail-' + stageId).classList.add('visible');
+        element.classList.add('active-node');
+    }
+
+    // Função para o Acordeão de Protocolos
+    function toggleProtocol(header) {
+        const body = header.nextElementSibling;
+        const icon = header.querySelector('.fa-chevron-down');
+        
+        if (body.classList.contains('open')) {
+            body.classList.remove('open');
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            // Fecha outros abertos (opcional, para efeito sanfona)
+            document.querySelectorAll('.protocol-body').forEach(el => el.classList.remove('open'));
+            document.querySelectorAll('.protocol-header .fa-chevron-down').forEach(el => el.style.transform = 'rotate(0deg)');
+            
+            body.classList.add('open');
+            icon.style.transform = 'rotate(180deg)';
+        }
+    }
+</script>
+
+<script src="assets/kinetic.js" defer></script></body>
+</html>

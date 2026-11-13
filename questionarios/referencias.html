@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referências & Validação - SF-36 Analytics</title>
+    <!-- Ícones FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0056b3;    
+            --primary-light: #e7f1ff;
+            --secondary: #004494;
+            --text: #333;
+            --text-light: #666;
+            --white: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #f9fbfd 0%, #eef2f5 100%);
+            --border-color: #e9ecef;
+            --highlight-border: #20c997;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9fbfd;
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- CABEÇALHO --- */
+        .app-header {
+            background-color: var(--white);
+            padding: 10px 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo-img { height: 40px; width: auto; }
+        .app-name { font-size: 1.4rem; font-weight: 700; color: var(--primary); margin: 0; }
+
+        .nav-menu { list-style: none; display: flex; gap: 30px; margin: 0; padding: 0; }
+        .nav-menu a { text-decoration: none; color: var(--text-light); font-weight: 600; transition: 0.3s; position: relative; padding: 5px 0; }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary); }
+        
+        .nav-menu a::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: var(--primary); transition: width 0.3s;
+        }
+        .nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
+
+        /* --- CONTEÚDO PRINCIPAL --- */
+        .main-content {
+            flex: 1;
+            padding: 40px 20px;
+            background: var(--bg-gradient);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Estilo Geral dos Cards */
+        .content-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header do Card com Ícone */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0; /* Impede o ícone de amassar */
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        /* Texto Justificado */
+        .text-body {
+            font-size: 1.05rem;
+            color: #444;
+            text-align: justify;
+        }
+        .text-body p { margin-bottom: 1.5rem; }
+        sup { color: var(--primary); font-weight: bold; margin-left: 2px; }
+
+        /* --- CARD DE DESTAQUE (NORMATIVA) --- */
+        .highlight-card {
+            border-left: 5px solid var(--highlight-border);
+            background: linear-gradient(to right, #ffffff, #f8fffc);
+        }
+
+        .highlight-card .icon-box {
+            background-color: #e6fffa;
+            color: var(--highlight-border);
+        }
+
+        .highlight-card .section-title {
+            color: #0ca678;
+        }
+
+        .normative-box {
+            background-color: rgba(32, 201, 151, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px dashed var(--highlight-border);
+            margin-top: 10px;
+        }
+
+        .normative-citation {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .normative-note {
+            font-size: 0.9rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- LISTA DE REFERÊNCIAS --- */
+        .ref-list { list-style: none; counter-reset: ref-counter; }
+        
+        .ref-item {
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.5;
+            border-bottom: 1px solid #f9f9f9;
+            padding-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ref-item:last-child { border-bottom: none; }
+
+        .ref-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background-color: #f1f3f5;
+            color: var(--text-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .ref-title { font-weight: 700; color: #333; display: block; margin-bottom: 4px; }
+        .ref-journal { font-style: italic; color: var(--primary); }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 0.85rem;
+            border-top: 1px solid #eee;
+            background-color: var(--white);
+        }
+
+        /* --- RESPONSIVIDADE (MOBILE) --- */
+        @media (max-width: 768px) {
+            /* 1. Ajuste do Cabeçalho: Coluna em vez de Linha */
+            .app-header { 
+                padding: 15px 20px; 
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo-area {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* 2. Menu Mobile: Botões em vez de Links simples */
+            .nav-menu { 
+                display: flex; /* Traz o menu de volta */
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .nav-menu a {
+                font-size: 0.85rem;
+                padding: 8px 16px;
+                background-color: #f8f9fa;
+                border-radius: 20px; /* Formato de pílula */
+                border: 1px solid #eee;
+            }
+
+            .nav-menu a.active {
+                background-color: var(--primary);
+                color: white;
+                border-color: var(--primary);
+            }
+
+            .nav-menu a::after { display: none; } /* Remove sublinhado no mobile */
+
+            /* 3. Ajustes de Conteúdo */
+            .main-content { padding: 20px 15px; }
+            .content-card { padding: 20px; }
+            
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .icon-box {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .section-title { font-size: 1.3rem; }
+        }
+    </style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/kinetic.css"></head>
+<body>
+
+    <!-- MENU SUPERIOR -->
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a><div class="reading-line" aria-hidden="true"></div><nav class="sm-nav" aria-label="Navegação principal"><a class="sm-brand" href="index.html" aria-label="SyntropicMind, início"><img src="assets/logo.png" width="180" height="60" alt="SyntropicMind"></a><button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="sm-links"><span></span><span></span></button><div class="sm-links" id="sm-links"><a style="--i:0" href="index.html">Visão geral</a><a style="--i:1" href="sf36.html">SF-36</a><a style="--i:2" href="msq_consentimento.html">Sono</a><a style="--i:3" href="dashboard.html">Relatório SF-36</a><a style="--i:4" href="resultado.html">Relatório do sono</a></div></nav><main id="conteudo" class="auxiliary"><section class="sm-hero shell"><div class="hero-copy"><div class="eyebrow">SyntropicMind / Explorar</div><h1>Ciência como ponto de partida.</h1><p>Referências e limitações do questionário SF-36.</p><div class="hero-tags"></div></div><div class="kinetic-art" aria-hidden="true"><svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width=".8"><g opacity=".48" class="orbit-a"><ellipse cx="200" cy="200" rx="140" ry="42" transform="rotate(0 200 200)"/><ellipse cx="200" cy="200" rx="134" ry="47" transform="rotate(8 200 200)"/><ellipse cx="200" cy="200" rx="128" ry="52" transform="rotate(16 200 200)"/><ellipse cx="200" cy="200" rx="122" ry="57" transform="rotate(24 200 200)"/><ellipse cx="200" cy="200" rx="116" ry="62" transform="rotate(32 200 200)"/><ellipse cx="200" cy="200" rx="110" ry="67" transform="rotate(40 200 200)"/><ellipse cx="200" cy="200" rx="104" ry="72" transform="rotate(48 200 200)"/><ellipse cx="200" cy="200" rx="98" ry="77" transform="rotate(56 200 200)"/><ellipse cx="200" cy="200" rx="92" ry="82" transform="rotate(64 200 200)"/><ellipse cx="200" cy="200" rx="86" ry="87" transform="rotate(72 200 200)"/><ellipse cx="200" cy="200" rx="80" ry="92" transform="rotate(80 200 200)"/></g><g class="orbit-b" opacity=".32" transform="rotate(60 200 200)"><ellipse cx="200" cy="200" rx="140" ry="42" transform="rotate(0 200 200)"/><ellipse cx="200" cy="200" rx="134" ry="47" transform="rotate(8 200 200)"/><ellipse cx="200" cy="200" rx="128" ry="52" transform="rotate(16 200 200)"/><ellipse cx="200" cy="200" rx="122" ry="57" transform="rotate(24 200 200)"/><ellipse cx="200" cy="200" rx="116" ry="62" transform="rotate(32 200 200)"/><ellipse cx="200" cy="200" rx="110" ry="67" transform="rotate(40 200 200)"/><ellipse cx="200" cy="200" rx="104" ry="72" transform="rotate(48 200 200)"/><ellipse cx="200" cy="200" rx="98" ry="77" transform="rotate(56 200 200)"/><ellipse cx="200" cy="200" rx="92" ry="82" transform="rotate(64 200 200)"/><ellipse cx="200" cy="200" rx="86" ry="87" transform="rotate(72 200 200)"/><ellipse cx="200" cy="200" rx="80" ry="92" transform="rotate(80 200 200)"/></g><g class="orbit-c" opacity=".25"><circle cx="200" cy="200" r="134"/><ellipse cx="200" cy="200" rx="68" ry="160"/><ellipse cx="200" cy="200" rx="155" ry="74"/></g><circle class="orbit-core" cx="200" cy="200" r="16" fill="currentColor" stroke="none"/><circle cx="200" cy="200" r="4" fill="currentColor" stroke="none"/></svg><span class="art-caption">FORMAS EM EQUILÍBRIO</span></div></section><div class="auxiliary-body">
+
+    <div class="main-content">
+        <div class="container">
+            
+            <!-- SEÇÃO 1: JUSTIFICATIVAS E LIMITAÇÕES -->
+            <div class="content-card">
+                <div class="card-header">
+                    <div class="icon-box"><i class="fas fa-info-circle"></i></div>
+                    <h1 class="section-title">Justificativas e Limitações</h1>
+                </div>
+                
+                <div class="text-body">
+                    <p>
+                        O <strong>SF-36 (Short Form 36 Health Survey)</strong> é amplamente utilizado na avaliação global de saúde devido à sua capacidade de mensurar múltiplos domínios do estado de saúde, incluindo aspectos físicos, emocionais e sociais, em diferentes populações e contextos clínicos.<sup>[1][2]</sup> Sua validade e confiabilidade foram confirmadas em diversos estudos internacionais, demonstrando consistência interna elevada e boa capacidade discriminativa entre diferentes condições clínicas e níveis de gravidade.<sup>[3][4][5]</sup> O instrumento é de fácil aplicação, autoexplicativo e apresenta alta taxa de aceitação e completude, o que favorece seu uso tanto em pesquisas quanto na prática clínica de rotina.<sup>[1][3][4]</sup> Além disso, a existência de dados normativos em diferentes países permite comparações populacionais e facilita a interpretação dos resultados.<sup>[2][6][5]</sup>
+                    </p>
+                    
+                    <p>
+                        Entretanto, o SF-36 apresenta algumas limitações importantes. Por ser uma ferramenta genérica, pode não captar aspectos específicos de determinadas doenças, limitando sua sensibilidade para mudanças clínicas sutis em contextos particulares.<sup>[2][7][8]</sup> Estudos baseados em análise de Rasch e teoria de resposta ao item identificaram questões de redundância, efeitos de piso/teto em alguns domínios e influência de fatores sociodemográficos nas respostas, o que pode comprometer a generalização dos resultados em populações específicas.<sup>[7][5]</sup> Além disso, o SF-36 não foi desenvolvido para avaliações econômicas de saúde, pois seus escores não refletem preferências dos pacientes nem permitem a obtenção direta de índices de utilidade para análises de custo-efetividade.<sup>[8]</sup> Portanto, recomenda-se considerar o contexto de aplicação e, quando necessário, complementar o SF-36 com instrumentos específicos de doença ou métodos de avaliação econômica.
+                    </p>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 2: DADOS NORMATIVOS (DESTAQUE) -->
+            <div class="content-card highlight-card">
+                <div class="card-header">
+                    <div class="icon-box"><i class="fas fa-chart-area"></i></div>
+                    <h2 class="section-title">Base de Dados Comparativa</h2>
+                </div>
+
+                <p style="margin-bottom: 15px; color: #555;">
+                    Para a geração dos relatórios comparativos deste aplicativo, utilizamos as médias populacionais estabelecidas no seguinte estudo de referência:
+                </p>
+
+                <div class="normative-box">
+                    <span class="normative-citation">
+                        "Measurement properties and normative data for the Norwegian SF-36: results from a general population survey."
+                    </span>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Autores:</strong> AM. Garratt e K. Stavem
+                    </div>
+                    <div class="normative-note">
+                        <i class="fas fa-check-circle" style="color: #20c997;"></i>
+                        <span>Fonte oficial das médias de normalidade utilizadas nos gráficos do sistema.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 3: LISTA DE REFERÊNCIAS GERAIS -->
+            <div class="content-card">
+                <div class="card-header">
+                    <div class="icon-box"><i class="fas fa-book-medical"></i></div>
+                    <h2 class="section-title">Referências Bibliográficas</h2>
+                </div>
+                
+                <ol class="ref-list">
+                    <li class="ref-item">
+                        <div class="ref-number">1</div>
+                        <span class="ref-title">The MOS 36-Item Short-Form Health Survey (SF-36). I. Conceptual Framework and Item Selection.</span> 
+                        <span>Ware JE, Sherbourne CD. <span class="ref-journal">Medical Care.</span> 1992;30(6):473-83.</span>
+                    </li>
+                    
+                    <li class="ref-item">
+                        <div class="ref-number">2</div>
+                        <span class="ref-title">Overview of the SF-36 Health Survey and the International Quality of Life Assessment (IQOLA) Project.</span> 
+                        <span>Ware JE, Gandek B. <span class="ref-journal">Journal of Clinical Epidemiology.</span> 1998;51(11):903-12.</span>
+                    </li>
+                    
+                    <li class="ref-item">
+                        <div class="ref-number">3</div>
+                        <span class="ref-title">The SF36 Health Survey Questionnaire: An Outcome Measure Suitable for Routine Use Within the NHS?</span> 
+                        <span>Garratt AM, Ruta DA, Abdalla MI, Buckingham JK, Russell IT. <span class="ref-journal">BMJ (Clinical Research Ed.).</span> 1993;306(6890):1440-4.</span>
+                    </li>
+                    
+                    <li class="ref-item">
+                        <div class="ref-number">4</div>
+                        <span class="ref-title">Validating the SF-36 Health Survey Questionnaire: New Outcome Measure for Primary Care.</span> 
+                        <span>Brazier JE, Harper R, Jones NM, et al. <span class="ref-journal">BMJ (Clinical Research Ed.).</span> 1992;305(6846):160-4.</span>
+                    </li>
+                    
+                    <li class="ref-item">
+                        <div class="ref-number">5</div>
+                        <span class="ref-title">Tests of Data Quality, Scaling Assumptions, and Reliability of the SF-36 in Eleven Countries: Results From the IQOLA Project.</span> 
+                        <span>Gandek B, Ware JE, Aaronson NK, et al. <span class="ref-journal">Journal of Clinical Epidemiology.</span> 1998;51(11):1149-58.</span>
+                    </li>
+                    
+                    <li class="ref-item">
+                        <div class="ref-number">6</div>
+                        <span class="ref-title">Short Form 36 (SF36) Health Survey Questionnaire: Normative Data for Adults of Working Age.</span> 
+                        <span>Jenkinson C, Coulter A, Wright L. <span class="ref-journal">BMJ (Clinical Research Ed.).</span> 1993;306(6890):1437-40.</span>
+                    </li>
+                    
+                    <li class="ref-item">
+                        <div class="ref-number">7</div>
+                        <span class="ref-title">Evaluating the Longitudinal Item and Category Stability of the SF-36 Full and Summary Scales Using Rasch Analysis.</span> 
+                        <span>Cordier R, Brown T, Clemson L, Byles J. <span class="ref-journal">BioMed Research International.</span> 2018;2018:1013453.</span>
+                    </li>
+                    
+                    <li class="ref-item">
+                        <div class="ref-number">8</div>
+                        <span class="ref-title">The Short-Form 36 (SF-36) Health Survey and Its Use in Pharmacoeconomic Evaluation.</span> 
+                        <span>Brazier J. <span class="ref-journal">PharmacoEconomics.</span> 1995;7(5):403-15.</span>
+                    </li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+
+    
+
+</div></main><footer class="sm-footer"><div class="shell footer-inner"><div><span class="footer-brand">SyntropicMind</span><p>Saúde, percepção e conhecimento.</p></div><button class="motion-toggle" type="button" aria-pressed="false">Pausar movimento</button><div class="footer-links"><a href="../index.html#projetos">Voltar ao SyntropicMind</a><a href="comparativo.html">Comparação</a><a href="index-sf36.html">Guia SF-36</a><a href="indexmsq.html">Guia MSQ</a><a href="sono.html">Sobre o sono</a><a href="referencias.html">Referências SF-36</a><a href="referencia-sono.html">Referências MSQ</a><a href="sobre.html">Sobre o projeto</a><a href="autor.html">Autor</a><a href="contato.html">Contato</a><a href="index.html">Questionários</a><a href="sf36.html">Consentimento SF-36</a><a href="msq_consentimento.html">Consentimento MSQ</a></div></div></footer><script src="assets/kinetic.js" defer></script></body>
+</html>

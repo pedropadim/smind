@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSQ-BR - Avaliação de Sintomas</title>
+    <!-- Ícones Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0056b3;    /* Azul Principal */
+            --secondary: #004494;  /* Azul Escuro */
+            --teal: #20c997;       /* Verde para Resultados */
+            --teal-dark: #1aa179;
+            --purple: #6f42c1;     /* Roxo para Sono */
+            --orange: #fd7e14;     /* Laranja para Referências */
+            --text: #333;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9fbfd;
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- MENU SUPERIOR --- */
+        .app-header {
+            background-color: #ffffff;
+            padding: 10px 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { font-size: 1.8rem; color: var(--primary); }
+        .app-name { font-size: 1.4rem; font-weight: 700; color: #0056b3; margin: 0; }
+
+        .nav-menu { list-style: none; display: flex; gap: 30px; margin: 0; padding: 0; }
+        .nav-menu a { text-decoration: none; color: #666; font-weight: 600; transition: 0.3s; position: relative; font-size: 1rem; }
+        .nav-menu a:hover, .nav-menu a.active { color: #0056b3; }
+        
+        .nav-menu a::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0;
+            background-color: #0056b3; transition: width 0.3s;
+        }
+        .nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
+
+        /* Barra de Navegação Secundária */
+        .secondary-nav {
+            background: var(--white);
+            padding: 15px 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-secondary {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Área Principal */
+        .hero {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #f9fbfd 0%, #eef2f5 100%);
+        }
+
+        .hero-content {
+            max-width: 1200px; /* Aumentado levemente para caber 4 cards */
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        p.description {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Grid de 4 Colunas */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Alterado para 4 colunas */
+            gap: 20px; /* Gap levemente reduzido para caber melhor */
+            margin-top: 30px;
+        }
+
+        .card {
+            padding: 30px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--white);
+            border: 1px solid #eee;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Estilos Específicos dos Cards */
+        
+        /* 1. Azul Preenchido */
+        .card-primary-fill { 
+            background-color: rgb(47, 127, 255); 
+            color: var(--white); 
+            border: none; 
+        }
+        .card-primary-fill:hover { background-color: var(--secondary); }
+        .card-primary-fill .card-text { color: rgba(255,255,255,0.9); }
+
+        /* 2. Borda Verde (Teal) */
+        .card-teal-border { border-top: 4px solid var(--teal); }
+        .card-teal-border i { color: var(--teal); }
+        .card-teal-border:hover { border-color: var(--teal-dark); }
+
+        /* 3. Borda Laranja */
+        .card-orange-border { border-top: 4px solid var(--orange); }
+        .card-orange-border i { color: var(--orange); }
+
+        /* 4. Borda Roxa (NOVO - Sono) */
+        .card-purple-border { border-top: 4px solid var(--purple); }
+        .card-purple-border i { color: var(--purple); }
+
+        .icon-large { font-size: 2.5rem; margin-bottom: 20px; } /* Ícone levemente menor para equilibrar */
+        .card-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 12px; }
+        .card-text { font-size: 0.9rem; opacity: 0.9; color: inherit; }
+        
+        .card-teal-border .card-text, 
+        .card-orange-border .card-text,
+        .card-purple-border .card-text {
+            color: #555;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 0.85rem;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+        }
+
+        /* --- MEDIA QUERIES --- */
+        @media (max-width: 1024px) {
+            .action-grid {
+                grid-template-columns: repeat(2, 1fr); /* Tablet/Laptop pequeno: 2x2 */
+            }
+            /* Removemos a regra do last-child pois 4 é par, fica perfeito em 2 colunas */
+        }
+
+        @media (max-width: 600px) {
+            .app-header {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+
+            .logo-area { width: 100%; justify-content: center; }
+            .nav-menu { width: 100%; justify-content: center; gap: 15px; font-size: 0.9rem; flex-wrap: wrap; }
+            .secondary-nav { display: none; }
+
+            .action-grid {
+                grid-template-columns: 1fr; /* Mobile: 1 coluna */
+                padding: 0 10px;
+            }
+
+            h1 { font-size: 1.8rem; }
+            .hero { padding: 30px 15px; }
+        }
+    </style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/kinetic.css"></head>
+<body>
+
+<!-- MENU SUPERIOR -->
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a><div class="reading-line" aria-hidden="true"></div><nav class="sm-nav" aria-label="Navegação principal"><a class="sm-brand" href="index.html" aria-label="SyntropicMind, início"><img src="assets/logo.png" width="180" height="60" alt="SyntropicMind"></a><button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="sm-links"><span></span><span></span></button><div class="sm-links" id="sm-links"><a style="--i:0" href="index.html">Visão geral</a><a style="--i:1" href="sf36.html">SF-36</a><a style="--i:2" href="msq_consentimento.html">Sono</a><a style="--i:3" href="dashboard.html">Relatório SF-36</a><a style="--i:4" href="resultado.html">Relatório do sono</a></div></nav><main id="conteudo" class="auxiliary"><section class="sm-hero shell"><div class="hero-copy"><div class="eyebrow">SyntropicMind / Explorar</div><h1>Conheça o seu descanso.</h1><p>Questionário, resultados e informações sobre o sono.</p><div class="hero-tags"></div></div><div class="kinetic-art" aria-hidden="true"><svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width=".8"><g opacity=".48" class="orbit-a"><ellipse cx="200" cy="200" rx="140" ry="42" transform="rotate(0 200 200)"/><ellipse cx="200" cy="200" rx="134" ry="47" transform="rotate(8 200 200)"/><ellipse cx="200" cy="200" rx="128" ry="52" transform="rotate(16 200 200)"/><ellipse cx="200" cy="200" rx="122" ry="57" transform="rotate(24 200 200)"/><ellipse cx="200" cy="200" rx="116" ry="62" transform="rotate(32 200 200)"/><ellipse cx="200" cy="200" rx="110" ry="67" transform="rotate(40 200 200)"/><ellipse cx="200" cy="200" rx="104" ry="72" transform="rotate(48 200 200)"/><ellipse cx="200" cy="200" rx="98" ry="77" transform="rotate(56 200 200)"/><ellipse cx="200" cy="200" rx="92" ry="82" transform="rotate(64 200 200)"/><ellipse cx="200" cy="200" rx="86" ry="87" transform="rotate(72 200 200)"/><ellipse cx="200" cy="200" rx="80" ry="92" transform="rotate(80 200 200)"/></g><g class="orbit-b" opacity=".32" transform="rotate(60 200 200)"><ellipse cx="200" cy="200" rx="140" ry="42" transform="rotate(0 200 200)"/><ellipse cx="200" cy="200" rx="134" ry="47" transform="rotate(8 200 200)"/><ellipse cx="200" cy="200" rx="128" ry="52" transform="rotate(16 200 200)"/><ellipse cx="200" cy="200" rx="122" ry="57" transform="rotate(24 200 200)"/><ellipse cx="200" cy="200" rx="116" ry="62" transform="rotate(32 200 200)"/><ellipse cx="200" cy="200" rx="110" ry="67" transform="rotate(40 200 200)"/><ellipse cx="200" cy="200" rx="104" ry="72" transform="rotate(48 200 200)"/><ellipse cx="200" cy="200" rx="98" ry="77" transform="rotate(56 200 200)"/><ellipse cx="200" cy="200" rx="92" ry="82" transform="rotate(64 200 200)"/><ellipse cx="200" cy="200" rx="86" ry="87" transform="rotate(72 200 200)"/><ellipse cx="200" cy="200" rx="80" ry="92" transform="rotate(80 200 200)"/></g><g class="orbit-c" opacity=".25"><circle cx="200" cy="200" r="134"/><ellipse cx="200" cy="200" rx="68" ry="160"/><ellipse cx="200" cy="200" rx="155" ry="74"/></g><circle class="orbit-core" cx="200" cy="200" r="16" fill="currentColor" stroke="none"/><circle cx="200" cy="200" r="4" fill="currentColor" stroke="none"/></svg><span class="art-caption">FORMAS EM EQUILÍBRIO</span></div></section><div class="auxiliary-body">
+    
+<!-- MENU SECUNDÁRIO -->
+
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Questionário de Avaliação do Sono</h1>
+        <p class="description">
+            O MSQ-BR é uma ferramenta para rastreamento de sintomas e avaliação da qualidade do Sono. Escolha uma ação abaixo:
+        </p>
+
+        <div class="action-grid">
+            
+            <!-- 1. CARD APLICAÇÃO DO QUESTIONÁRIO -->
+            <a href="msq_consentimento.html" class="card card-primary-fill">
+                <i class="fas fa-clipboard-list icon-large"></i>
+                <div class="card-title">Aplicar Questionário</div>
+                <div class="card-text">Inicie uma nova avaliação MSQ para registrar sintomas atuais.</div>
+            </a>
+
+            <!-- 2. CARD VISUALIZAÇÃO DOS RESULTADOS -->
+            <a href="resultado.html" class="card card-teal-border">
+                <i class="fas fa-chart-line icon-large"></i>
+                <div class="card-title">Visualizar Resultados</div>
+                <div class="card-text">Acesse seus resultados anteriores.</div>
+            </a>
+
+            <!-- 3. CARD SONO (NOVO) -->
+            <a href="sono.html" class="card card-purple-border">
+                <i class="fas fa-bed icon-large"></i>
+                <div class="card-title">Higiene do Sono</div>
+                <div class="card-text">Entenda como melhorar sua qualidade de sono e descanso.</div>
+            </a>
+
+            <!-- 4. CARD REFERÊNCIAS -->
+            <a href="referencias.html" class="card card-orange-border">
+                <i class="fas fa-book-medical icon-large"></i>
+                <div class="card-title">Referências MSQ-BR</div>
+                <div class="card-text">Consulte a base científica, interpretação de scores e documentação.</div>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+
+
+</div></main><footer class="sm-footer"><div class="shell footer-inner"><div><span class="footer-brand">SyntropicMind</span><p>Saúde, percepção e conhecimento.</p></div><button class="motion-toggle" type="button" aria-pressed="false">Pausar movimento</button><div class="footer-links"><a href="../index.html#projetos">Voltar ao SyntropicMind</a><a href="comparativo.html">Comparação</a><a href="index-sf36.html">Guia SF-36</a><a href="indexmsq.html">Guia MSQ</a><a href="sono.html">Sobre o sono</a><a href="referencias.html">Referências SF-36</a><a href="referencia-sono.html">Referências MSQ</a><a href="sobre.html">Sobre o projeto</a><a href="autor.html">Autor</a><a href="contato.html">Contato</a><a href="index.html">Questionários</a><a href="sf36.html">Consentimento SF-36</a><a href="msq_consentimento.html">Consentimento MSQ</a></div></div></footer><script src="assets/kinetic.js" defer></script></body>
+</html>
